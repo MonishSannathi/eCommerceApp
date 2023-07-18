@@ -1,0 +1,36 @@
+﻿@model Ecommerce.Models.Purchase.PurchaseOrderEntity
+
+@{
+    ViewBag.Title = "ViewOrder";
+}
+
+<h2>ViewOrder</h2>
+
+<div>
+    <h4>Purchase</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderPdfPath)
+        </dt>
+
+        <dd>
+            <a class="btn btn-outline-primary" href="@Model.OrderPdfPath" target="_blank">
+                View File
+            </a>
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
