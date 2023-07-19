@@ -7,10 +7,17 @@
 <h2>GetAllOrders</h2>
 
 <p>
-    @Html.ActionLink("Create New", "AddOrder")
+    @Html.ActionLink("Add a Purchase Order", "AddOrder")
 </p>
 
-@if(Model != null && Model.Any())
+@if (Model == null || Model.Count==0)
+{
+    <div class="alert alert-info" role="alert">
+        There are currently no items.
+    </div>
+}
+
+@if (Model != null && Model.Any())
 {
     <table class="table">
         <tr>
@@ -33,9 +40,9 @@
                     @Html.DisplayFor(modelItem => item.OrderPdfPath)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                    @Html.ActionLink("ViewOrder", "ViewOrder", new { id = item.id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.id }) |*@
+                    @Html.ActionLink("ViewOrder", "ViewOrder", new { id = item.id }) 
+                    @*@Html.ActionLink("Delete", "Delete", new { id = item.id })*@
                 </td>
             </tr>
         }

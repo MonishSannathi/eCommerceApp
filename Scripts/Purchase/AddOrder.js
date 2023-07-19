@@ -4,7 +4,7 @@
 
     // Enable the Preview Radio Button only if file is uploaded
 
-    $('#pdfOrderFile').on('change', function (e) {
+    $('#OrderFile').on('change', function (e) {
         var file = e.target.files[0];
         $('#filePreview').prop('disabled',false);
         // Create a URL for the PDF file

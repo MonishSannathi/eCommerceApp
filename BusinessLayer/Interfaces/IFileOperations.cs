@@ -12,8 +12,9 @@ namespace Ecommerce.BusinessLayer.Interfaces
     internal interface IFileOperations
     {
         FileResult GetFile();
-        string GetFilePath();
+        string GetAbsoluteFilePath();
 
+        string GetRelativeFilePath();
         void SaveFile(string path, HttpPostedFileBase file);
 
         string GetEncryptedFilePath();

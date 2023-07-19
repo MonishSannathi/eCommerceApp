@@ -14,9 +14,7 @@ namespace Ecommerce.BusinessLayer.Implementation
     {
         private string fileExtension;
         private string fileNameWithoutExtension;
-        private string[] allowedExtensions = { ".pdf" };
-        private int allowedContentLength = 5000000;
-        private int allowedNameLength = 100;
+
         public AppFileOperations()
         {
            
@@ -28,7 +26,7 @@ namespace Ecommerce.BusinessLayer.Implementation
             this.fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
         }
 
-        public string GetFilePath()
+        public string GetAbsoluteFilePath()
         {
             string fileName = this.fileNameWithoutExtension + this.fileExtension;
 
@@ -37,7 +35,16 @@ namespace Ecommerce.BusinessLayer.Implementation
             return filePath;
         }
 
-        
+        public string GetRelativeFilePath()
+        {
+            string fileName = this.fileNameWithoutExtension + this.fileExtension;
+
+            string filePath = Path.Combine("~/PurchaseOrderFiles/", fileName);
+
+            return filePath;
+        }
+
+
 
         public string GetDecryptedFilePath()
         {
@@ -72,33 +79,6 @@ namespace Ecommerce.BusinessLayer.Implementation
             httpPostedFile.SaveAs(path);
         }
 
-        public Boolean CheckFileName()
-        {
-            //Check Whether the fileName exceeds the string length
-            if(this.fileNameWithoutExtension.Length > this.allowedNameLength)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public Boolean CheckFileExtension(string contentType)
-        {
-            //Check Whether the fileExtension is expected or not 
-            //Also check Content type
-            if(!allowedExtensions.Contains(this.fileExtension) || contentType.ToLower().CompareTo("application/pdf") != 0) return false;
-            return true;
-        }
-
-        public Boolean CheckFileSize(int contentLength)
-        {
-            //Check if file content length is greater than Half the mega byte
-            if (contentLength > this.allowedContentLength)
-            {
-                return false;
-            }
-            return true;
-        }
 
         public void DeleteFile()
         {

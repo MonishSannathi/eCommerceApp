@@ -9,10 +9,6 @@ namespace Ecommerce.BusinessLayer.Interfaces
 {
     internal interface ILocalFileOperations:IFileOperations
     {
-        Boolean CheckFileName();
-        Boolean CheckFileExtension(string contentType);
-        Boolean CheckFileSize(int contentLength);
-
         void SetFileDetails(string path);
 
     }
