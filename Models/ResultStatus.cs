@@ -9,6 +9,8 @@ namespace Ecommerce.Models
     {
         Boolean isNotValid;
         Dictionary<String, String> messages;
+        Boolean shouldRedirectToError;
+        String errorMessage;
 
         public ResultStatus()
         {
@@ -34,5 +36,12 @@ namespace Ecommerce.Models
         {
             isNotValid = value;
         }
+
+        public Boolean ShouldRedirectToError() { return shouldRedirectToError; }
+        public void setRedirectToError(Boolean value) { shouldRedirectToError = value; }
+
+        public String GetErrorMessage() { return errorMessage; }
+        public void SetErrorMessage(String value) {  errorMessage = value; }
+
     }
 }

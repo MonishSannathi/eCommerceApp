@@ -49,5 +49,15 @@ namespace Ecommerce.BusinessLayer.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public string GetAbsoluteFilePath()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetRelativeFilePath()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

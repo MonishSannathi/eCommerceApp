@@ -12,10 +12,12 @@ namespace Ecommerce.BusinessLayer.Interfaces
     internal interface IPurchase
     {
         ResultStatus AddPurchaseOrder(PurchaseOrderEntity purchaseOrderEntity);
-        PurchaseOrderEntity GetPurchaseOrder();
+        PurchaseOrderEntity GetPurchaseOrder(string generatedId);
 
         List<PurchaseOrderEntity> GetPurchases();
 
         ResultStatus DeletePurchase();
+
+        string ValidatePurchase(string generatedId,string filePath);
     }
 }

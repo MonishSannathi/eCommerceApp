@@ -27,14 +27,14 @@ namespace Ecommerce.DatabaseLayer.Implementations
             _purchaseOrders.Remove(entity);
         }
 
-        public PurchaseOrderEntity GetById(int id)
+        public PurchaseOrderEntity GetById(string id)
         {
-            return _purchaseOrders.ElementAt(id);
+            return _purchaseOrders.Find(x => x.id.CompareTo(id)==0);
         }
 
         public void Update(PurchaseOrderEntity entity)
         {
-            int index = _purchaseOrders.FindIndex(x => x.id == entity.id);
+            int index = _purchaseOrders.FindIndex(x => x.id.CompareTo(entity.id) == 0);
             _purchaseOrders[index] = entity;
         }
 

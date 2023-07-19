@@ -130,8 +130,11 @@
     <Compile Include="BusinessLayer\Interfaces\IFileOperations.cs" />
     <Compile Include="BusinessLayer\Interfaces\ILocalFileOperations.cs" />
     <Compile Include="BusinessLayer\Interfaces\IPurchase.cs" />
+    <Compile Include="Controllers\ErrorMessageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
+    <Compile Include="CustomAttributes\Authorization\ValidateUser.cs" />
+    <Compile Include="CustomAttributes\Validation\ValidFile.cs" />
     <Compile Include="DatabaseLayer\Implementations\AppDatabase.cs" />
     <Compile Include="DatabaseLayer\Interfaces\IDatabase.cs" />
     <Compile Include="Global.asax.cs">
@@ -198,6 +201,7 @@
     <Content Include="Views\Purchase\AddOrder.cshtml" />
     <Content Include="Views\Purchase\ViewOrder.cshtml" />
     <Content Include="Views\Purchase\GetAllOrders.cshtml" />
+    <Content Include="Views\ErrorMessage\DisplayError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
