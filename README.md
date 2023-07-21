@@ -18,6 +18,7 @@
 1. Application is developed on .Net Framework 4.8.1
 2. Install Visual Studio Latest Version
 3. If any error occurs, create PurchaseOrderFiles named Folder in the project, if folder exists ignore this
+4. main -branch has the Latest code.
 
 ## Architecture
 
