@@ -128,6 +128,14 @@ namespace Ecommerce.BusinessLayer.Implementation
 
                     string filePath = localFileOperations.GetFilePath();
 
+                    if (!localFileOperations.CheckPermissions(""))
+                    {
+                        result.setRedirectToError(true);
+                        result.SetErrorMessage("There is something wrong with permissions to the directory. Please try later");
+
+                        return result;
+                    }
+
                     //Save the file locally
                     localFileOperations.SaveFile(filePath, purchaseOrderEntity.OrderFile);
 

@@ -7,5 +7,6 @@ namespace Ecommerce.BusinessLayer.Interfaces
         string GetFilePath();
         void SaveFile(string path, HttpPostedFileBase file);
         bool DeleteFile(string path);
+        bool CheckPermissions(string path);
     }
 }
