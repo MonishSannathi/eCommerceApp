@@ -19,6 +19,7 @@
 2. Install Visual Studio Latest Version
 3. If any error occurs, create PurchaseOrderFiles named Folder in the project, if folder exists ignore this
 4. main -branch has the Latest code.
+5. No Database is involved. Just a List Data Structure is maintainted to store the data. So No additional installations are required.
 
 ## Architecture
 
