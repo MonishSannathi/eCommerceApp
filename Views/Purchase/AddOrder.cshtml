@@ -22,7 +22,7 @@
     <div class="mb-3 row">
         <label for="@Html.IdFor(file => file.OrderFile)" class="form-label m-1">Purchase Order</label>
         <div class="row m-1">
-            <input type="file" name="@Html.NameFor(file => file.OrderFile)" id="@Html.IdFor(file => file.OrderFile)" class="form-control" accept=".pdf"/>
+            <input type="file" name="@Html.NameFor(file => file.OrderFile)" id="@Html.IdFor(file => file.OrderFile)" class="form-control" accept=".pdf" required title="Please Upload the file"/>
             @Html.ValidationMessageFor(model => model.OrderFile, "", new { @class = "text-danger" })
         </div>
     </div>

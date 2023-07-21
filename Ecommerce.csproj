@@ -123,23 +123,18 @@
     <Compile Include="BusinessLayer\Implementation\AppFileOperations.cs" />
     <Compile Include="BusinessLayer\Implementation\CommonEncryption.cs" />
     <Compile Include="BusinessLayer\Implementation\PurchaseOrder.cs" />
-    <Compile Include="BusinessLayer\Implementation\ExternalServerFileOperations.cs" />
     <Compile Include="BusinessLayer\Interfaces\IEncryption.cs" />
-    <Compile Include="BusinessLayer\Interfaces\IExternalFileOperations.cs" />
     <Compile Include="BusinessLayer\Interfaces\IFileOperations.cs" />
     <Compile Include="BusinessLayer\Interfaces\ILocalFileOperations.cs" />
     <Compile Include="BusinessLayer\Interfaces\IPurchase.cs" />
     <Compile Include="Controllers\ErrorMessageController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
-    <Compile Include="CustomAttributes\Authorization\ValidateUser.cs" />
     <Compile Include="CustomAttributes\Validation\ValidFile.cs" />
     <Compile Include="DatabaseLayer\Implementations\AppDatabase.cs" />
     <Compile Include="DatabaseLayer\Interfaces\IDatabase.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HelperMethods\Utility.cs" />
     <Compile Include="Models\Purchase\PurchaseOrderEntity.cs" />
     <Compile Include="Models\ResultStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -183,7 +178,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Purchase\EditOrder.js" />
-    <Content Include="Scripts\Purchase\GetAllOrders.js" />
     <Content Include="Styles\Purchase\AddOrder.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -196,9 +190,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Purchase\AddOrder.cshtml" />
     <Content Include="Views\Purchase\ViewOrder.cshtml" />
     <Content Include="Views\Purchase\GetAllOrders.cshtml" />

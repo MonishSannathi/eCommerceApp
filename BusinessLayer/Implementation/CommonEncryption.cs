@@ -1,11 +1,8 @@
 ﻿using Ecommerce.BusinessLayer.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 
 namespace Ecommerce.BusinessLayer.Implementation
 {
@@ -15,7 +12,7 @@ namespace Ecommerce.BusinessLayer.Implementation
         {
             try
             {
-                string password = @"myKey123"; // Your Key Here
+                string password = @"myKey123";
 
                 UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] key = UE.GetBytes(password);
@@ -76,10 +73,6 @@ namespace Ecommerce.BusinessLayer.Implementation
             catch(Exception ex)
             {
                 
-            }
-            finally
-            {
-               
             }
         }
     }

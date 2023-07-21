@@ -1,16 +1,11 @@
 ﻿using Ecommerce.BusinessLayer.Interfaces;
 using Ecommerce.DatabaseLayer.Implementations;
 using Ecommerce.DatabaseLayer.Interfaces;
-using Ecommerce.HelperMethods;
 using Ecommerce.Models;
 using Ecommerce.Models.Purchase;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Hosting;
-using System.Web.Mvc;
 
 
 namespace Ecommerce.BusinessLayer.Implementation
@@ -42,15 +37,13 @@ namespace Ecommerce.BusinessLayer.Implementation
         public ResultStatus AddPurchaseOrder(PurchaseOrderEntity purchaseOrderEntity)
         {
             
-            localFileOperations = new AppFileOperations();
-            localFileOperations.SetFileDetails(purchaseOrderEntity.OrderFile.FileName);
-            
             ResultStatus result = new ResultStatus();
-
 
             try
             {
-                string filePath = localFileOperations.GetAbsoluteFilePath();
+                localFileOperations = new AppFileOperations(purchaseOrderEntity.OrderFile.FileName);
+
+                string filePath = localFileOperations.GetFilePath();
 
                 //Save the file locally
                 localFileOperations.SaveFile(filePath, purchaseOrderEntity.OrderFile);
@@ -119,30 +112,28 @@ namespace Ecommerce.BusinessLayer.Implementation
 
             localFileOperations = new AppFileOperations(filePath);
 
-            return localFileOperations.GetDecryptedLocalFilePath();
+            return localFileOperations.GetDecryptedFilePath();
         }
 
         public ResultStatus EditPurchaseOrder(PurchaseOrderEntity purchaseOrderEntity)
         {
-            localFileOperations = new AppFileOperations();
-            localFileOperations.SetFileDetails(purchaseOrderEntity.OrderFile.FileName);
-
             ResultStatus result = new ResultStatus();
-
-
             try
             {
-                string filePath = localFileOperations.GetAbsoluteFilePath();
-
-                //Save the file locally
-                localFileOperations.SaveFile(filePath, purchaseOrderEntity.OrderFile);
-
-                string encryptedfilePath = localFileOperations.GetEncryptedFilePath();
-                localFileOperations.EncryptFile(filePath, encryptedfilePath);
-
-                //If a new file is uploaded then delete the old files
+                //If a new file is uploaded then save the file and encrypt it, delete the old files
                 if(purchaseOrderEntity.OrderFile != null)
                 {
+
+                    localFileOperations = new AppFileOperations(purchaseOrderEntity.OrderFile.FileName);
+
+                    string filePath = localFileOperations.GetFilePath();
+
+                    //Save the file locally
+                    localFileOperations.SaveFile(filePath, purchaseOrderEntity.OrderFile);
+
+                    string encryptedfilePath = localFileOperations.GetEncryptedFilePath();
+                    localFileOperations.EncryptFile(filePath, encryptedfilePath);
+
                     //Get the Old file name from the HashMap maintainted to validate the file
                     string oldFilePath = purchases[purchaseOrderEntity.id];
 
@@ -153,12 +144,12 @@ namespace Ecommerce.BusinessLayer.Implementation
                         return result;
                     }
 
-                }
+                    //Set the New Pdf Path
+                    purchaseOrderEntity.OrderPdfPath = purchaseOrderEntity.OrderFile.FileName;
+                    //Update the Hash Map
+                    purchases[purchaseOrderEntity.id] = purchaseOrderEntity.OrderPdfPath;
 
-                //Set the New Pdf Path
-                purchaseOrderEntity.OrderPdfPath = purchaseOrderEntity.OrderFile.FileName;
-                //Update the Hash Map
-                purchases[purchaseOrderEntity.id] = purchaseOrderEntity.OrderPdfPath;
+                }
 
                 database.Update(purchaseOrderEntity);
             }
@@ -208,7 +199,7 @@ namespace Ecommerce.BusinessLayer.Implementation
             {                
                 localFileOperations = new AppFileOperations(fileName);
 
-                string filePath = localFileOperations.GetAbsoluteFilePath();
+                string filePath = localFileOperations.GetFilePath();
                 string encryptedfilePath = localFileOperations.GetEncryptedFilePath();
                 string decryptedfilePath = localFileOperations.GetDecryptedFilePath();
 
