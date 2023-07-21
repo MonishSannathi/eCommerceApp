@@ -1,8 +1,10 @@
 ﻿using Ecommerce.BusinessLayer.Interfaces;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.IO;
 using System.Web;
 using System.Web.Hosting;
+using System.Web.WebPages;
 
 namespace Ecommerce.BusinessLayer.Implementation
 {
@@ -78,6 +80,29 @@ namespace Ecommerce.BusinessLayer.Implementation
             {
                 encryption.Decrypt(inputFilePath, outputFilePath);
             }
+        }
+
+        public bool CheckPermissions(string path)
+        {
+            if (path.IsEmpty() || path.IsNullOrWhiteSpace()) path = HostingEnvironment.ApplicationPhysicalPath;
+
+
+            DirectoryInfo directoryInfo = new DirectoryInfo(path);
+
+            try
+            {
+                string testFile = Path.Combine(path, "write_test.txt");
+                using (FileStream fs = File.Create(testFile))
+                {
+                    // If we can create a test file, the directory is writable
+                    fs.Close();
+                    File.Delete(testFile);
+                }
+
+            }
+            catch (Exception ex) { return false; }
+
+            return true;
         }
     }
 }
