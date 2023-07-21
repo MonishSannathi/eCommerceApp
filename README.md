@@ -15,3 +15,12 @@
 
 ## Instructions for executing the application locally
 
+1. Application is developed on .Net Framework 4.8.1
+2. Install Visual Studio Latest Version
+3. If any error occurs, create PurchaseOrderFiles named Folder in the project, if folder exists ignore this
+
+## Architecture
+
+1. Layered architecture
+2. Code has been segregated on three Layers(user interface, business or domain layer, Database Layer)
+
