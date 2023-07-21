@@ -58,6 +58,7 @@ namespace Ecommerce.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult ViewOrder(string id)
         {
            
@@ -68,6 +69,7 @@ namespace Ecommerce.Controllers
             return View(purchaseOrderEntity);
         }
 
+        [HttpGet]
         public ActionResult GetAllOrders()
         {
             List<PurchaseOrderEntity> purchaseOrderEntity = new List<PurchaseOrderEntity>();
@@ -87,6 +89,61 @@ namespace Ecommerce.Controllers
             if (filePath == string.Empty) return View("Error");
 
             return File(Server.MapPath(filePath), "application/pdf");
+        }
+
+        [HttpGet]
+        public ActionResult EditOrder(string id)
+        {
+            PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
+            purchaseOrderEntity = purchaseOrder.GetPurchaseOrder(id);
+            if (purchaseOrderEntity == null) return RedirectToAction("DisplayError", "ErrorMessage", new { errorMessage = "Please Provide Valid File Details" });
+
+            return View(purchaseOrderEntity);
+        }
+
+        [HttpPost]
+        public ActionResult EditOrder(PurchaseOrderEntity purchaseOrderEntity)
+        {
+            if (!ModelState.IsValid) return View(purchaseOrderEntity);
+
+            ResultStatus result = new ResultStatus();
+            result = purchaseOrder.EditPurchaseOrder(purchaseOrderEntity);
+
+            if (result.IsNotValid())
+            {
+                Dictionary<String, String> messages = new Dictionary<string, string>();
+                messages = result.GetStatus();
+                foreach (KeyValuePair<string, string> entry in messages)
+                {
+                    ModelState.AddModelError(entry.Key, entry.Value);
+
+                }
+            }
+            else if (result.ShouldRedirectToError())
+            {
+                return RedirectToAction("DisplayError", "ErrorMessage", new { errorMessage = result.GetErrorMessage() });
+            }
+            else
+            {
+                //Clear the Values in the form once successful Submission
+                ModelState.Clear();
+            }
+
+            return RedirectToAction("GetAllOrders");
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteOrder(string id)
+        {
+            ResultStatus result = new ResultStatus();
+            result = purchaseOrder.DeletePurchaseOrder(id);
+
+            if(result.IsNotValid())
+            {
+                return RedirectToAction("DisplayError", "ErrorMessage", new { errorMessage = result.GetErrorMessage() });
+            }
+
+            return RedirectToAction("GetAllOrders");
         }
     }
 }

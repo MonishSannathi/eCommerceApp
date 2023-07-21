@@ -1,7 +1,4 @@
 ﻿$(document).ready(function () {
-    // Handle file input change event
-
-
     // Enable the Preview Radio Button only if file is uploaded
 
     $('#OrderFile').on('change', function (e) {

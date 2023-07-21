@@ -19,11 +19,11 @@ namespace Ecommerce.BusinessLayer.Implementation
     {
         private ILocalFileOperations localFileOperations;
         private IDatabase<PurchaseOrderEntity> database;
-        private Dictionary<string,string> purchases;
+        private static Dictionary<string,string> purchases;
         public PurchaseOrder() 
         {
             database = new AppDatabase();
-            purchases = new Dictionary<string,string>();
+            if(purchases == null) purchases = new Dictionary<string, string>();
         }
 
         /*
@@ -55,13 +55,8 @@ namespace Ecommerce.BusinessLayer.Implementation
                 //Save the file locally
                 localFileOperations.SaveFile(filePath, purchaseOrderEntity.OrderFile);
 
-
                 string encryptedfilePath = localFileOperations.GetEncryptedFilePath();
-
-
-
-                CommonEncryption commonEncryption = new CommonEncryption();
-                commonEncryption.EncryptFile(filePath, encryptedfilePath);
+                localFileOperations.EncryptFile(filePath, encryptedfilePath);
 
                 //Add it to the Database Layer
                 purchaseOrderEntity.id = Guid.NewGuid().ToString();
@@ -80,11 +75,6 @@ namespace Ecommerce.BusinessLayer.Implementation
             return result;
         }
 
-        public ResultStatus DeletePurchase()
-        {
-            throw new NotImplementedException();
-        }
-
         public PurchaseOrderEntity GetPurchaseOrder(string generatedId)
         {
             PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
@@ -97,9 +87,7 @@ namespace Ecommerce.BusinessLayer.Implementation
                 string encryptedfilePath = localFileOperations.GetEncryptedFilePath();
                 string decryptedfilePath = localFileOperations.GetDecryptedFilePath();
 
-
-                CommonEncryption commonEncryption = new CommonEncryption();
-                commonEncryption.DecryptFile(encryptedfilePath, decryptedfilePath);
+                localFileOperations.DecryptFile(encryptedfilePath, decryptedfilePath);
             }
             catch( Exception ex )
             {
@@ -111,7 +99,7 @@ namespace Ecommerce.BusinessLayer.Implementation
 
         public List<PurchaseOrderEntity> GetPurchases()
         {
-
+            if (!purchases.Any()) InitializaPurchaseOrder();
             List<PurchaseOrderEntity> purchaseOrderEntities = database.GetAll()
              .Where(obj => obj is PurchaseOrderEntity)
              .OfType<PurchaseOrderEntity>()
@@ -125,13 +113,121 @@ namespace Ecommerce.BusinessLayer.Implementation
             //If the generatedId not Present
             //If the generatedId is not associated to the file path
             //Both the above cases are invalid
-            if (!purchases.Any()) InitializaPurchaseOrder();
+            
 
             if (!purchases.ContainsKey(generatedId) || purchases[generatedId].CompareTo(filePath) != 0) return "";
 
             localFileOperations = new AppFileOperations(filePath);
 
             return localFileOperations.GetDecryptedLocalFilePath();
+        }
+
+        public ResultStatus EditPurchaseOrder(PurchaseOrderEntity purchaseOrderEntity)
+        {
+            localFileOperations = new AppFileOperations();
+            localFileOperations.SetFileDetails(purchaseOrderEntity.OrderFile.FileName);
+
+            ResultStatus result = new ResultStatus();
+
+
+            try
+            {
+                string filePath = localFileOperations.GetAbsoluteFilePath();
+
+                //Save the file locally
+                localFileOperations.SaveFile(filePath, purchaseOrderEntity.OrderFile);
+
+                string encryptedfilePath = localFileOperations.GetEncryptedFilePath();
+                localFileOperations.EncryptFile(filePath, encryptedfilePath);
+
+                //If a new file is uploaded then delete the old files
+                if(purchaseOrderEntity.OrderFile != null)
+                {
+                    //Get the Old file name from the HashMap maintainted to validate the file
+                    string oldFilePath = purchases[purchaseOrderEntity.id];
+
+                    result = DeletePurchaseOrderFiles(oldFilePath);
+
+                    if(result.IsNotValid())
+                    {
+                        return result;
+                    }
+
+                }
+
+                //Set the New Pdf Path
+                purchaseOrderEntity.OrderPdfPath = purchaseOrderEntity.OrderFile.FileName;
+                //Update the Hash Map
+                purchases[purchaseOrderEntity.id] = purchaseOrderEntity.OrderPdfPath;
+
+                database.Update(purchaseOrderEntity);
+            }
+            catch (Exception ex)
+            {
+                result.SetNotValid(true);
+                result.SetErrorMessage("There is something wrong with saving the file. Please try later");
+            }
+
+            return result;
+        }
+
+        public ResultStatus DeletePurchaseOrder(string id)
+        {
+            ResultStatus result = new ResultStatus();
+            PurchaseOrderEntity purchaseOrderEntity = new PurchaseOrderEntity();
+            try
+            {
+                purchaseOrderEntity = database.GetById(id);
+
+                //First Delete the associated Files with Purchase Order
+                result = DeletePurchaseOrderFiles(purchaseOrderEntity.OrderPdfPath);
+
+                //If Success, only then delete the Purchase Order
+                if (result.IsNotValid())
+                {
+                    result.SetNotValid(true);
+                    return result;
+                }
+
+                database.Delete(purchaseOrderEntity);
+            }
+            catch (Exception ex)
+            {
+                result.SetNotValid(true);
+                result.SetErrorMessage("Something went wrong During Deletion. Please try again later");
+            }
+
+            return result;
+        }
+
+        public ResultStatus DeletePurchaseOrderFiles(string fileName)
+        {
+            ResultStatus result = new ResultStatus();
+            
+            try
+            {                
+                localFileOperations = new AppFileOperations(fileName);
+
+                string filePath = localFileOperations.GetAbsoluteFilePath();
+                string encryptedfilePath = localFileOperations.GetEncryptedFilePath();
+                string decryptedfilePath = localFileOperations.GetDecryptedFilePath();
+
+                //Delete all three files if exists
+                //Original File -- Encrypted File -- DecryptedFile
+
+                if (!localFileOperations.DeleteFile(filePath) || !localFileOperations.DeleteFile(encryptedfilePath) || !localFileOperations.DeleteFile(decryptedfilePath))
+                {
+                    result.SetNotValid(true);
+                    result.SetErrorMessage("Unable to Delete Purchase Order Files. Please try again later");
+                }
+            }
+            catch (Exception ex)
+            {
+                result.SetNotValid(true);
+                result.SetErrorMessage("Something went wrong while Deletion. Please try again later");
+            }
+
+            return result;
         }
     }
 }

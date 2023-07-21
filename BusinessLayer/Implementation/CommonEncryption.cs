@@ -9,9 +9,9 @@ using System.Web;
 
 namespace Ecommerce.BusinessLayer.Implementation
 {
-    public class CommonEncryption
+    public class CommonEncryption:IEncryption
     {
-        public void DecryptFile(string inputFile, string outputFile)
+        public void Decrypt(string inputPath, string outputPath)
         {
             try
             {
@@ -20,7 +20,7 @@ namespace Ecommerce.BusinessLayer.Implementation
                 UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] key = UE.GetBytes(password);
 
-                FileStream fsCrypt = new FileStream(inputFile, FileMode.Open);
+                FileStream fsCrypt = new FileStream(inputPath, FileMode.Open);
 
                 RijndaelManaged RMCrypto = new RijndaelManaged();
 
@@ -28,7 +28,7 @@ namespace Ecommerce.BusinessLayer.Implementation
                     RMCrypto.CreateDecryptor(key, key),
                     CryptoStreamMode.Read);
 
-                FileStream fsOut = new FileStream(outputFile, FileMode.Create);
+                FileStream fsOut = new FileStream(outputPath, FileMode.Create);
 
                 int data;
                 while ((data = cs.ReadByte()) != -1)
@@ -45,7 +45,7 @@ namespace Ecommerce.BusinessLayer.Implementation
             }
         }
 
-        public void EncryptFile(string inputFile, string outputFile)
+        public void Encrypt(string inputPath, string outputPath)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Ecommerce.BusinessLayer.Implementation
                 UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] key = UE.GetBytes(password);
 
-                string cryptFile = outputFile;
+                string cryptFile = outputPath;
                 FileStream fsCrypt = new FileStream(cryptFile, FileMode.Create);
 
                 RijndaelManaged RMCrypto = new RijndaelManaged();
@@ -62,7 +62,7 @@ namespace Ecommerce.BusinessLayer.Implementation
                     RMCrypto.CreateEncryptor(key, key),
                     CryptoStreamMode.Write);
 
-                FileStream fsIn = new FileStream(inputFile, FileMode.Open);
+                FileStream fsIn = new FileStream(inputPath, FileMode.Open);
 
                 int data;
                 while ((data = fsIn.ReadByte()) != -1)

@@ -1,4 +1,5 @@
 ﻿using Ecommerce.BusinessLayer.Interfaces;
+using Ecommerce.Models;
 using Ecommerce.Models.Purchase;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,15 @@ namespace Ecommerce.BusinessLayer.Implementation
     {
         private string fileExtension;
         private string fileNameWithoutExtension;
-
+        private IEncryption encryption;
         public AppFileOperations()
         {
-           
+           encryption = new CommonEncryption();
         }
 
         public AppFileOperations(string path)
         {
+            encryption = new CommonEncryption();
             this.fileExtension = Path.GetExtension(path);
             this.fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
         }
@@ -66,7 +68,8 @@ namespace Ecommerce.BusinessLayer.Implementation
         {
             string decryptedFileNameWithoutExtension = this.fileNameWithoutExtension + "_decrypted_";
             string decryptedFileName = decryptedFileNameWithoutExtension + this.fileExtension;
-            return "/PurchaseOrderFiles/" + decryptedFileName;
+            string decryptedFilePath = Path.Combine("/PurchaseOrderFiles/", decryptedFileName);
+            return decryptedFilePath;
         }
         public FileResult GetFile()
         {
@@ -80,15 +83,34 @@ namespace Ecommerce.BusinessLayer.Implementation
         }
 
 
-        public void DeleteFile()
+        public bool DeleteFile(string path)
         {
-            throw new NotImplementedException();
+            
+            try
+            {
+                if(File.Exists(path)) { File.Delete(path); }
+            }
+            catch (Exception ex){
+                return false;
+            }
+            
+            return true;
         }
 
         public void SetFileDetails(string path)
         {
             this.fileExtension = Path.GetExtension(path);
             this.fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+        }
+
+        public void EncryptFile(string inputFilePath,string outputFilePath)
+        {
+            encryption.Encrypt(inputFilePath, outputFilePath);
+        }
+
+        public void DecryptFile(string inputFilePath, string outputFilePath)
+        {
+            encryption.Decrypt(inputFilePath, outputFilePath);
         }
     }
 }

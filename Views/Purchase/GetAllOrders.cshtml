@@ -4,28 +4,32 @@
     ViewBag.Title = "GetAllOrders";
 }
 
-<h2>GetAllOrders</h2>
+<h2>All Orders</h2>
 
-<p>
+<!--<p>
     @Html.ActionLink("Add a Purchase Order", "AddOrder")
-</p>
+</p>-->
 
-@if (Model == null || Model.Count==0)
+@Html.AntiForgeryToken()
+
+@if (Model == null || Model.Count == 0)
 {
     <div class="alert alert-info" role="alert">
         There are currently no items.
     </div>
 }
 
+
+
 @if (Model != null && Model.Any())
 {
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model[0].OrderTitle)
+                Order Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].OrderPdfPath)
+                File Name
             </th>
             <th></th>
         </tr>
@@ -39,10 +43,17 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.OrderPdfPath)
                 </td>
-                <td>
-                    @*@Html.ActionLink("Edit", "Edit", new { id = item.id }) |*@
-                    @Html.ActionLink("ViewOrder", "ViewOrder", new { id = item.id }) 
-                    @*@Html.ActionLink("Delete", "Delete", new { id = item.id })*@
+                <td style="display:flex;">
+                   
+                    @Html.ActionLink("EditOrder", "EditOrder", new { id = item.id }, new { @class = "me-2 btn btn-primary" }) |
+                    @Html.ActionLink("ViewOrder", "ViewOrder", new { id = item.id }, new { @class = "ms-2 me-2 btn btn-primary" }) |
+
+                    @using (Html.BeginForm("DeleteOrder", "Purchase", new { id = item.id}, FormMethod.Post))
+                    {
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        <button type="submit" class="ms-2 delete-button btn btn-danger ps-2">Delete</button>
+                    }
+                    @*<button class=".deletePurchaseOrder btn btn-primary" data-item="@Url.Action("DisplayPurchaseOrderPdf",new {id=item.id})" id="@item.id" onclick="deletePurchaseOrder(this)">DeleteOrder</button>*@
                 </td>
             </tr>
         }
@@ -50,4 +61,7 @@
     </table>
 }
 
-
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/Purchase/GetAllOrders.js"></script>
+}

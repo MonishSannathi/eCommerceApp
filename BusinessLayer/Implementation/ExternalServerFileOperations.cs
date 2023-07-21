@@ -59,5 +59,10 @@ namespace Ecommerce.BusinessLayer.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public bool DeleteFile(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

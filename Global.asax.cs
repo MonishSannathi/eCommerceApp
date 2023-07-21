@@ -34,5 +34,12 @@ namespace Ecommerce
              
             }
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            // If any exception occurs
+            // Redirect to the Error page
+            Response.Redirect("~/ErrorMessage/DisplayError");
+        }
     }
 }

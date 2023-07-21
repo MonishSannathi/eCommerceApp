@@ -10,7 +10,7 @@ namespace Ecommerce.CustomAttributes.Validation
 {
     public class ValidFile:ValidationAttribute
     {
-        private int allowedContentLength = 5000000;
+        private int allowedContentLength = 10000000;
         private int allowedNameLength = 100;
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {

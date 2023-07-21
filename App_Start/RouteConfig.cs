@@ -16,7 +16,15 @@ namespace Ecommerce
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Purchase", action = "GetAllOrders", id = UrlParameter.Optional }
+                defaults: new { controller = "Purchase", action = "GetAllOrders", id = UrlParameter.Optional }, 
+                constraints: new { httpMethod = new HttpMethodConstraint(new[] { "get" ,"post" }) }
+            );
+
+            routes.MapRoute(
+                name: "Delete Methods",
+                url: "{version}/cards/{cardID}",
+                defaults: new { Controller = "Purchase", Action = "DeleteOrder" },
+                constraints: new { httpMethod = new HttpMethodConstraint(new[] { "delete" }) }
             );
         }
     }

@@ -8,8 +8,8 @@ namespace Ecommerce.BusinessLayer.Interfaces
 {
     internal interface IEncryption
     {
-        byte[] EncryptFile(byte[] filedata);
+        void Encrypt(string inputPath, string outputPath);
 
-        byte[] DecryptFile(byte[] filedata);
+        void Decrypt(string inputPath, string outputPath);
     }
 }
