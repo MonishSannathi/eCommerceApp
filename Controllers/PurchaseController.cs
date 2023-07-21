@@ -1,15 +1,9 @@
 ﻿using Ecommerce.BusinessLayer.Implementation;
 using Ecommerce.Models;
 using Ecommerce.Models.Purchase;
-using Microsoft.Ajax.Utilities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.WebPages;
 
 namespace Ecommerce.Controllers
 {
@@ -37,7 +31,7 @@ namespace Ecommerce.Controllers
 
             if (result.IsNotValid())
             {
-                Dictionary<String, String> messages = new Dictionary<string, string>();
+                Dictionary<string, string> messages = new Dictionary<string, string>();
                 messages = result.GetStatus();
                 foreach (KeyValuePair<string, string> entry in messages)
                 {
@@ -77,18 +71,14 @@ namespace Ecommerce.Controllers
             return View(purchaseOrderEntity);
         }
 
-        [CustomAttributes.ValidateUser]
+        
         public ActionResult DisplayPurchaseOrderPdf(string id, string path)
         {
-            /*if (string.IsNullOrEmpty(id)) return "";
-            else if()*/
-            //Get the filePath from the id
-
             string filePath = purchaseOrder.ValidatePurchase(id, path);
 
             if (filePath == string.Empty) return View("Error");
 
-            return File(Server.MapPath(filePath), "application/pdf");
+            return File(filePath, "application/pdf");
         }
 
         [HttpGet]
@@ -101,7 +91,7 @@ namespace Ecommerce.Controllers
             return View(purchaseOrderEntity);
         }
 
-        [HttpPost]
+        [HttpPut]
         public ActionResult EditOrder(PurchaseOrderEntity purchaseOrderEntity)
         {
             if (!ModelState.IsValid) return View(purchaseOrderEntity);
@@ -111,7 +101,7 @@ namespace Ecommerce.Controllers
 
             if (result.IsNotValid())
             {
-                Dictionary<String, String> messages = new Dictionary<string, string>();
+                Dictionary<string, string> messages = new Dictionary<string, string>();
                 messages = result.GetStatus();
                 foreach (KeyValuePair<string, string> entry in messages)
                 {

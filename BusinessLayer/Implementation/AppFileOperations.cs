@@ -1,13 +1,8 @@
 ﻿using Ecommerce.BusinessLayer.Interfaces;
-using Ecommerce.Models;
-using Ecommerce.Models.Purchase;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Hosting;
-using System.Web.Mvc;
 
 namespace Ecommerce.BusinessLayer.Implementation
 {
@@ -16,10 +11,6 @@ namespace Ecommerce.BusinessLayer.Implementation
         private string fileExtension;
         private string fileNameWithoutExtension;
         private IEncryption encryption;
-        public AppFileOperations()
-        {
-           encryption = new CommonEncryption();
-        }
 
         public AppFileOperations(string path)
         {
@@ -28,7 +19,7 @@ namespace Ecommerce.BusinessLayer.Implementation
             this.fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
         }
 
-        public string GetAbsoluteFilePath()
+        public string GetFilePath()
         {
             string fileName = this.fileNameWithoutExtension + this.fileExtension;
 
@@ -36,17 +27,6 @@ namespace Ecommerce.BusinessLayer.Implementation
 
             return filePath;
         }
-
-        public string GetRelativeFilePath()
-        {
-            string fileName = this.fileNameWithoutExtension + this.fileExtension;
-
-            string filePath = Path.Combine("~/PurchaseOrderFiles/", fileName);
-
-            return filePath;
-        }
-
-
 
         public string GetDecryptedFilePath()
         {
@@ -64,28 +44,13 @@ namespace Ecommerce.BusinessLayer.Implementation
             return encryptedFilePath;
         }
 
-        public string GetDecryptedLocalFilePath()
-        {
-            string decryptedFileNameWithoutExtension = this.fileNameWithoutExtension + "_decrypted_";
-            string decryptedFileName = decryptedFileNameWithoutExtension + this.fileExtension;
-            string decryptedFilePath = Path.Combine("/PurchaseOrderFiles/", decryptedFileName);
-            return decryptedFilePath;
-        }
-        public FileResult GetFile()
-        {
-            throw new NotImplementedException();
-        }
-
-
         public void SaveFile(string path, HttpPostedFileBase httpPostedFile) 
         {
             httpPostedFile.SaveAs(path);
         }
 
-
         public bool DeleteFile(string path)
         {
-            
             try
             {
                 if(File.Exists(path)) { File.Delete(path); }
@@ -97,20 +62,22 @@ namespace Ecommerce.BusinessLayer.Implementation
             return true;
         }
 
-        public void SetFileDetails(string path)
-        {
-            this.fileExtension = Path.GetExtension(path);
-            this.fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
-        }
-
         public void EncryptFile(string inputFilePath,string outputFilePath)
         {
-            encryption.Encrypt(inputFilePath, outputFilePath);
+            //If the encrypted file already exists then do not run the encryption again
+            if (!File.Exists(outputFilePath))
+            {
+                encryption.Encrypt(inputFilePath, outputFilePath);
+            }
         }
 
         public void DecryptFile(string inputFilePath, string outputFilePath)
         {
-            encryption.Decrypt(inputFilePath, outputFilePath);
+            //If the decrypted file already exists then do not run the decryption again
+            if(!File.Exists(outputFilePath))
+            {
+                encryption.Decrypt(inputFilePath, outputFilePath);
+            }
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using Ecommerce.DatabaseLayer.Interfaces;
 using Ecommerce.Models.Purchase;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Ecommerce.DatabaseLayer.Implementations
 {
