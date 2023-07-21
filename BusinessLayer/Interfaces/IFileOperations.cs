@@ -23,6 +23,6 @@ namespace Ecommerce.BusinessLayer.Interfaces
 
         string GetDecryptedLocalFilePath();
 
-        void DeleteFile();
+        bool DeleteFile(string path);
     }
 }

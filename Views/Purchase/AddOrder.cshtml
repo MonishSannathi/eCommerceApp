@@ -4,43 +4,40 @@
     ViewBag.Title = "AddOrder";
 }
 
-<h2>AddOrder</h2>
+<h2>Add Purchase Order</h2>
 
 
-@using (Html.BeginForm("AddOrder","Purchase", FormMethod.Post, new { enctype="multipart/form-data"})) 
+@using (Html.BeginForm("AddOrder", "Purchase", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>Purchase</h4>
+<div style="padding-left:16px">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.OrderTitle, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.OrderTitle, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.OrderTitle, "", new { @class = "text-danger" })
-        </div>
+    <div class="mb-3 row">
+        <label for="@Html.IdFor(file => file.OrderTitle)" class="form-label m-1">Title</label>
+        @Html.EditorFor(model => model.OrderTitle, new { htmlAttributes = new { @class = "form-control ms-3 col-9" } })
+        @Html.ValidationMessageFor(model => model.OrderTitle, "", new { @class = "text-danger m-1" })
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.OrderFile, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <input type="file" name="@Html.NameFor(file => file.OrderFile)" id="@Html.IdFor(file => file.OrderFile)"/>
+    <div class="mb-3 row">
+        <label for="@Html.IdFor(file => file.OrderFile)" class="form-label m-1">Purchase Order</label>
+        <div class="row m-1">
+            <input type="file" name="@Html.NameFor(file => file.OrderFile)" id="@Html.IdFor(file => file.OrderFile)" class="form-control" accept=".pdf"/>
             @Html.ValidationMessageFor(model => model.OrderFile, "", new { @class = "text-danger" })
         </div>
+    </div>
+    <div class="mb-3 form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="filePreview" disabled>
+        <label class="form-check-label" for="filePreview">Preview</label>
     </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-primary" accept=".pdf" />
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
     </div>
 
-    <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="filePreview" disabled>
-        <label class="form-check-label" for="filePreview">Preview</label>
-    </div>
+
 
     <div class="form-group">
         <div class="col-md-10">
@@ -52,9 +49,9 @@
 </div>
 }
 
-<div>
+<!--<div>
     @Html.ActionLink("Back to Purchase Orders", "GetAllOrders")
-</div>
+</div>-->
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

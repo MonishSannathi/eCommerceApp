@@ -16,8 +16,10 @@ namespace Ecommerce.BusinessLayer.Interfaces
 
         List<PurchaseOrderEntity> GetPurchases();
 
-        ResultStatus DeletePurchase();
+        ResultStatus DeletePurchaseOrder(string id);
 
         string ValidatePurchase(string generatedId,string filePath);
+
+        ResultStatus EditPurchaseOrder(PurchaseOrderEntity purchaseOrderEntity);
     }
 }

@@ -11,5 +11,8 @@ namespace Ecommerce.BusinessLayer.Interfaces
     {
         void SetFileDetails(string path);
 
+        void EncryptFile(string inputFilePath, string outputFilePath);
+
+        void DecryptFile(string inputFilePath, string outputFilePath);
     }
 }
